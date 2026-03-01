@@ -30,6 +30,27 @@ def _is_action_line(line: str) -> bool:
         return True
     return False
 
+def _looks_imperative(sentence: str) -> bool:
+    words = re.findall(r"[A-Za-z']+", sentence)
+    if not words:
+        return False
+    first = words[0]
+    # Crude heuristic: treat these as imperative starters
+    imperative_starters = {
+        "add",
+        "create",
+        "implement",
+        "fix",
+        "update",
+        "write",
+        "check",
+        "verify",
+        "refactor",
+        "document",
+        "design",
+        "investigate",
+    }
+    return first.lower() in imperative_starters
 
 def extract_action_items(text: str) -> List[str]:
     lines = text.splitlines()
@@ -65,25 +86,3 @@ def extract_action_items(text: str) -> List[str]:
         unique.append(item)
     return unique
 
-
-def _looks_imperative(sentence: str) -> bool:
-    words = re.findall(r"[A-Za-z']+", sentence)
-    if not words:
-        return False
-    first = words[0]
-    # Crude heuristic: treat these as imperative starters
-    imperative_starters = {
-        "add",
-        "create",
-        "implement",
-        "fix",
-        "update",
-        "write",
-        "check",
-        "verify",
-        "refactor",
-        "document",
-        "design",
-        "investigate",
-    }
-    return first.lower() in imperative_starters
