@@ -25,3 +25,6 @@ These steps work with Python 3.12.
    ```bash
    poetry install --no-interaction
    ```
+
+## Activate Conda
+```source /Users/nicholas.ang/miniconda3/bin/activate```

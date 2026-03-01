@@ -8,8 +8,20 @@ load_dotenv()
 NUM_RUNS_TIMES = 5
 
 # TODO: Fill this in!
-YOUR_SYSTEM_PROMPT = ""
+YOUR_SYSTEM_PROMPT = '''
+You are a precise calculator, you can handle many math calculating problems.
+After you have completed your reasoning, give the final answer on the last line in the format "Answer: <number>". 
 
+<Example>
+What is (20+20) (mod 3)?
+Steps: 
+1. According to signal priority, first calculate the result of 20+20
+2. calculate the mod of the result
+3. output the result: "Answer: 1"
+</Example>
+
+You only need to output the final answer with the format: "Answer :1", don't output other texts.
+'''
 
 USER_PROMPT = """
 Solve this problem, then give the final answer on the last line as "Answer: <number>".
@@ -48,7 +60,7 @@ def test_your_prompt(system_prompt: str) -> bool:
     for idx in range(NUM_RUNS_TIMES):
         print(f"Running test {idx + 1} of {NUM_RUNS_TIMES}")
         response = chat(
-            model="llama3.1:8b",
+            model="mistral-nemo:12b",
             messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": USER_PROMPT},
