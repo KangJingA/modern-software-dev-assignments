@@ -27,4 +27,7 @@ These steps work with Python 3.12.
    ```
 
 ## Activate Conda
-```source /Users/nicholas.ang/miniconda3/bin/activate```
+```
+source /Users/nicholas.ang/miniconda3/bin/activate
+conda activate cs146s
+```
