@@ -1,15 +1,12 @@
 from __future__ import annotations
 
-import os
 import re
 from typing import List
-import json
-from typing import Any
+
 from ollama import chat
-from dotenv import load_dotenv
 from pydantic import BaseModel
 
-load_dotenv()
+from .. import config
 
 
 class _ActionItemList(BaseModel):
@@ -95,7 +92,7 @@ def extract_action_items(text: str) -> List[str]:
 
 def extract_action_items_llm(text: str) -> List[str]:
     response = chat(
-        model=os.getenv("OLLAMA_MODEL", "mistral-nemo:12b"),
+        model=config.OLLAMA_MODEL,
         messages=[
             {
                 "role": "system",
