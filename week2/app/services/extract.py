@@ -7,8 +7,14 @@ import json
 from typing import Any
 from ollama import chat
 from dotenv import load_dotenv
+from pydantic import BaseModel
 
 load_dotenv()
+
+
+class _ActionItemList(BaseModel):
+    items: list[str]
+
 
 BULLET_PREFIX_PATTERN = re.compile(r"^\s*([-*•]|\d+\.)\s+")
 KEYWORD_PREFIXES = (
@@ -86,3 +92,22 @@ def extract_action_items(text: str) -> List[str]:
         unique.append(item)
     return unique
 
+
+def extract_action_items_llm(text: str) -> List[str]:
+    response = chat(
+        model=os.getenv("OLLAMA_MODEL", "mistral-nemo:12b"),
+        messages=[
+            {
+                "role": "system",
+                "content": (
+                    "Extract all action items from the text. "
+                    "Return only concrete tasks or to-dos. "
+                    "If there are none, return an empty list."
+                ),
+            },
+            {"role": "user", "content": text},
+        ],
+        format=_ActionItemList.model_json_schema(),
+        options={"temperature": 0},
+    )
+    return _ActionItemList.model_validate_json(response.message.content).items
